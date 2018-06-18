@@ -1,10 +1,10 @@
-# ColorTurbine
+# ColorTurbine ![build status](https://gitlab.com/ColorTurbine/ColorTurbine/badges/master/build.svg)
 
 ColorTurbine is built to stream animations to DIY wifi-connected addressible LED strips.
 
 # Build a wifi-connected LED strip
 
-Firmware is currently available for ESP8266 + WS2812b based LED strips. See [https://github.com/GeorgeHahn/esp8266-udp-pixel-renderer](GeorgeHahn/esp8266-udp-pixel-renderer).
+Firmware is currently available for ESP8266 + WS2812b based LED strips. See [https://github.com/ColorTurbine/esp8266-udp-pixel-renderer](ColorTurbine/esp8266-udp-pixel-renderer).
 
 # Setup
 
