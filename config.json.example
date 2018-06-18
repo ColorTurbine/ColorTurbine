@@ -1,0 +1,84 @@
+{
+    "strips": [
+        {
+            "name": "counter",
+            "type": "RGBW",
+            "address": "",
+            "ledCount": 123,
+            "plugins": [
+                {
+                    "plugin": "ColorTurbine.TwoColorClock",
+                    "day": "(0,0,0,15)",
+                    "night": "(15,0,0,0)"
+                }
+            ]
+        },
+        {
+            "name": "cabinets",
+            "type": "RGB",
+            "address": "",
+            "ledCount": 240,
+            "plugins": [
+                {
+                    "plugin": "ColorTurbine.TwoModeClock",
+                    "day": {
+                        "plugin": "ColorTurbine.Flow"
+                    },
+                    "night": {
+                        "plugin": "ColorTurbine.FloodFill",
+                        "color": "(10,0,0,0)"
+                    }
+                }
+            ]
+        },
+        {
+            "name": "whiteboard",
+            "type": "RGBW2D",
+            "address": "",
+            "width": 25,
+            "height": 31,
+            "plugins": [
+                {
+                    "plugin": "ColorTurbine.Temperature2D",
+                    "name": "whiteboardTemperature",
+                    "location": "(0,23)"
+                },
+                {
+                    "plugin": "ColorTurbine.SkritterPixel",
+                    "name": "skritterPixel",
+                    "height": 0,
+                    "days": "7",
+                    "OAUTH_CLIENT_NAME": "",
+                    "OAUTH_CLIENT_SECRET": "",
+                    "username": "",
+                    "password": ""
+                }
+            ]
+        }
+    ],
+    "services": {
+        "habitica": {
+            "api-user": "",
+            "api-key": ""
+        },
+        "weather": {
+            "apikey": "",
+            "latitude": "",
+            "longitude": ""
+        },
+        "sun": {
+            "latitude": "",
+            "longitude": ""
+        },
+        "influxDB": {
+            "url": "http://influxdb:8086/",
+            "user": "",
+            "password": "",
+            "database": ""
+        },
+        "hue": {
+            "appKey": ""
+        }
+    },
+    "runtimePlugins": []
+}
