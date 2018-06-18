@@ -1,4 +1,4 @@
-# ColorTurbine
+# ColorTurbine ![build status](https://gitlab.com/ColorTurbine/ColorTurbine/badges/master/build.svg)
 
 ColorTurbine is built to stream animations to DIY wifi-connected addressible LED strips.
 
