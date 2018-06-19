@@ -34,6 +34,9 @@ namespace ColorTurbine
             var tok = (JToken)config["busStops"];
             var busstops = tok.ToObject<BusStop[]>();
 
+            var loc = config.location.Replace("(", "").Replace(")", "").Split(",").Select(x => int.Parse(x.Trim()));
+            this.location = new Point(loc.ElementAt(0), loc.ElementAt(1));
+
             stops = new StopCollection(baseURL, busstops);
         }
 
