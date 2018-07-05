@@ -230,5 +230,7 @@ namespace ColorTurbine
         {
             ((IStrip)_strip).Fill(start, end, c, mode);
         }
+
+        public void DumpBuffer() => ((IStrip)_strip).DumpBuffer();
     }
 }

@@ -20,6 +20,7 @@ namespace ColorTurbine
         void Fill(double start, double end, RGBWColor c, FillType mode = FillType.Set);
         string Name { get; set; }
         void Send(bool force);
+        void DumpBuffer();
 
         RGBWColor this[int index] { get; set; }
 
@@ -232,6 +233,19 @@ namespace ColorTurbine
                     }
                 }
             }
+        }
+
+        public virtual void DumpBuffer()
+        {
+            dirty = true;
+
+            buffer[0] = 2; // Command: drop buffer
+            buffer[1] = 0; 
+            buffer[2] = 0; // Packet len
+            buffer[3] = 6;
+            buffer[4] = 0;
+            buffer[5] = 0;
+            client.SendAsync(buffer, 6, address);
         }
 
         public abstract RGBWColor this[int index] { get; set; }
