@@ -13,8 +13,9 @@ namespace ColorTurbine
         string lat, lon;
         public WeatherService()
         {
+            // TODO: Only initialize if used
             var config = Services.Configuration.GetServiceConfiguration("weather");
-            var apikey = (string)config["apikey"];
+            var apikey = (string)config?["apikey"];
             if(apikey == null)
                 throw new ArgumentNullException("Weather service requires an API key");
             client = new WeatherClient(apikey);

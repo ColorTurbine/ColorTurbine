@@ -1,6 +1,8 @@
 using System;
 using System.IO;
 using System.Reflection;
+using Hangfire;
+using Hangfire.MemoryStorage;
 
 namespace ColorTurbine
 {
@@ -8,26 +10,40 @@ namespace ColorTurbine
     {
         static void Main(string[] args)
         {
-            var configWatcher = new FileSystemWatcher();
-            configWatcher.Path = Environment.CurrentDirectory;
-            configWatcher.NotifyFilter = NotifyFilters.LastWrite | NotifyFilters.CreationTime | NotifyFilters.Size;
-            configWatcher.Changed += (_, fschange) =>
+            BackgroundJobServer server = null;
+            try
             {
-                if(fschange.Name != "config.json")
-                    return;
+                // Initialize Hangfire
+                GlobalConfiguration.Configuration.UseMemoryStorage();
+                server = new BackgroundJobServer();
 
-                Console.WriteLine("HACK: Die and let docker-compose reload us to get new configuration.");
-                Environment.Exit(0);
-            };
-            configWatcher.EnableRaisingEvents = true;
+                // Reload config.json on change
+                var configWatcher = new FileSystemWatcher();
+                configWatcher.Path = Environment.CurrentDirectory;
+                configWatcher.NotifyFilter = NotifyFilters.LastWrite | NotifyFilters.CreationTime | NotifyFilters.Size;
+                configWatcher.Changed += (_, fschange) =>
+                {
+                    if (fschange.Name != "config.json")
+                        return;
 
-            Console.WriteLine("Initializing");
+                    Console.WriteLine("HACK: Die and let docker-compose reload us to get new configuration.");
+                    Environment.Exit(0);
+                };
+                configWatcher.EnableRaisingEvents = true;
 
-            var manager = new StripManager();
-            manager.LoadConfiguration();
+                // Load strips and start main loop
+                Console.WriteLine("Initializing");
+                var manager = new StripManager();
+                manager.LoadConfiguration();
 
-            Console.WriteLine("Running");
-            manager.RunForever();
+                Console.WriteLine("Running");
+                manager.RunForever();
+            }
+            catch (Exception)
+            {
+                server?.Dispose();
+                throw;
+            }
         }
     }
 }

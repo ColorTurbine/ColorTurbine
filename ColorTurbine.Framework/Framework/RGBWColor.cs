@@ -17,6 +17,14 @@ namespace ColorTurbine
             this.w = w;
         }
 
+        public RGBWColor(RGBColor rgb)
+        {
+            this.r = rgb.r;
+            this.g = rgb.g;
+            this.b = rgb.b;
+            this.w = 0;
+        }
+
         public override bool Equals(object obj)
         {
             if (obj is RGBWColor)

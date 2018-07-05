@@ -43,6 +43,7 @@ namespace ColorTurbine
 
         public override void Paint()
         {
+            strip.DumpBuffer();
             strip.Fill(0, strip.led_count - 1, Color);
         }
     }

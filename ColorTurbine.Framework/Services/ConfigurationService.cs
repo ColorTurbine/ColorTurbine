@@ -132,20 +132,28 @@ namespace ColorTurbine
 
         public RuntimePlugin CreateRuntimePlugin(StripManager m, RuntimePluginConfig rp)
         {
-            // Voodoo: create plugin
-            System.Reflection.Assembly asy;
-            if(rp.assembly == null)
+            try
             {
-                asy = System.Reflection.Assembly.GetExecutingAssembly();
-            }
-            else
-            {
-                asy = System.Reflection.Assembly.LoadFrom(rp.assembly);
-            }
-            RuntimePlugin gin = (RuntimePlugin)asy.CreateInstance(rp.binary);
-            gin.Initialize(m, rp);
+                // Voodoo: create plugin
+                System.Reflection.Assembly asy;
+                if (rp.assembly == null)
+                {
+                    asy = System.Reflection.Assembly.GetExecutingAssembly();
+                }
+                else
+                {
+                    asy = System.Reflection.Assembly.LoadFrom(rp.assembly);
+                }
+                RuntimePlugin gin = (RuntimePlugin)asy.CreateInstance(rp.binary);
+                gin.Initialize(m, rp);
 
-            return gin;
+                return gin;
+            }
+            catch (Exception e)
+            {
+                Console.WriteLine("Crashed while creating RuntimePlugin");
+                return null;
+            }
         }
 
         public IStrip CreateStrip(StripConfig sc)
@@ -179,7 +187,9 @@ namespace ColorTurbine
 
         public ServiceConfig GetServiceConfiguration(string section)
         {
-            return configuration.services[section];
+            if(configuration.services == null || !configuration.services.ContainsKey(section))
+                return null;
+            return configuration.services?[section];
         }
 
         public Configuration GetConfiguration()
