@@ -1,9 +1,9 @@
 using System;
 using System.Threading.Tasks;
+using static ColorTurbine.SunService;
 
 namespace ColorTurbine
 {
-
     public class TwoColorClock : IPlugin
     {
         private RGBWColor _dayColor;
@@ -13,7 +13,7 @@ namespace ColorTurbine
             set
             {
                 _dayColor = value;
-                smudged = true;
+                _smudged = true;
             }
         }
 
@@ -24,12 +24,11 @@ namespace ColorTurbine
             set
             {
                 _nightColor = value;
-                smudged = true;
+                _smudged = true;
             }
         }
 
-        private bool prevNightMode = false;
-        private bool smudged = false;
+        private bool _smudged = false;
 
         public override void Initialize(IStrip s, PluginConfig config)
         {
@@ -37,51 +36,29 @@ namespace ColorTurbine
             
             DayColor = RGBWColor.Parse((string)config["day"]);
             NightColor = RGBWColor.Parse((string)config["night"]);
+
+            Services.Sun.OnSunEvent += (ev) =>
+            {
+                _smudged = true;
+            };
         }
 
         public override void OnEnable()
         {
-            smudged = true;
+            _smudged = true;
         }
 
-        public override bool NeedsRender()
-        {
-            if (smudged)
-                return true;
-
-            // Force a refresh when nightmode changes
-            if (prevNightMode != Services.Sun.NightMode)
-            {
-                prevNightMode = Services.Sun.NightMode;
-                return true;
-            }
-            
-            var alt = Services.Sun.CalculateSunPosition();
-            if (alt.altitude > 5 || alt.altitude < -1)
-            {
-                return false;
-            }
-            return true;
-        }
+        public override bool NeedsRender() => _smudged;
 
         public override Task Render()
         {
-            smudged = false;
+            _smudged = false;
             return Task.CompletedTask;
         }
 
         public override void Paint()
         {
-            var color = DayColor;
-            if (Services.Sun.NightMode)
-            {
-                color = NightColor;
-            }
-
-            for (int i = 0; i < strip.led_count; i++)
-            {
-                strip[i] = color * Services.Sun.Brightness;
-            }
+            strip.Fill(0, strip.led_count - 1, Services.Sun.NightMode ? NightColor : DayColor);
         }
     }
 }

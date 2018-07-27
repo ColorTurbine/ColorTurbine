@@ -4,10 +4,6 @@
     <TargetFramework>netcoreapp2.1</TargetFramework>
   </PropertyGroup>
   <ItemGroup>
-    <PackageReference Include="InfluxData.Net" Version="8.0.1" />
-    <PackageReference Include="M2MqttDotnetCore" Version="1.0.7" />
-    <PackageReference Include="Q42.HueApi" Version="3.6.3" />
-    <PackageReference Include="Q42.HueApi.ColorConverters" Version="3.6.0" />
-    <PackageReference Include="WUnderground.Net" Version="2.0.7" />
+    <ProjectReference Include="..\ColorTurbine.Framework\ColorTurbine.Framework.csproj" />
   </ItemGroup>
 </Project>

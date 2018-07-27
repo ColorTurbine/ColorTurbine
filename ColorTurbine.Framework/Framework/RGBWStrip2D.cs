@@ -20,7 +20,7 @@ namespace ColorTurbine
 
     public class RGBWStrip2D : IStrip // Be a 'strip'
     {
-        RGBWStrip _strip; // Contain an implemented strip (for low level handling - only RGBW for now)
+        RGBWStrip _strip; // Contain an implemented strip (for low level - only RGBW for now - handling)
         public int width;
         public int height;
         bool mirroredX;
@@ -33,7 +33,6 @@ namespace ColorTurbine
             this.height = height;
             this.mirroredX = mirroredX;
         }
-        
         Dictionary<string, int[]> font = new Dictionary<string, int[]>
         {
             [" "] = new[] { 0x00, 0x00, 0x00, 0x00, 0x00 },

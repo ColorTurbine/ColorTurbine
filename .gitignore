@@ -5,6 +5,7 @@
 
 # configuration file
 config.json
+*.sqlite3
 
 # Docker
 out/

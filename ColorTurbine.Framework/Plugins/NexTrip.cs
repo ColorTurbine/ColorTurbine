@@ -157,7 +157,7 @@ namespace ColorTurbine
             {
                 return true;
             }
-            if (DateTime.UtcNow - lastRender < TimeSpan.FromMinutes(1))
+            if (DateTime.UtcNow - lastRender < TimeSpan.FromMinutes(1)) // todo: expose config
             {
                 return false;
             }

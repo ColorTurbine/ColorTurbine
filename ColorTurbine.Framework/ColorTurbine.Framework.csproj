@@ -1,0 +1,23 @@
+﻿<Project Sdk="Microsoft.NET.Sdk">
+  <PropertyGroup>
+    <TargetFramework>netcoreapp2.1</TargetFramework>
+    <VersionPrefix>0.1.0</VersionPrefix>
+    
+    <PackageId>ColorTurbine.Framework</PackageId>
+    <Authors>George Hahn</Authors>
+    <Description>LED animation/information display framework</Description>
+    <PackageProjectUrl>https://github.com/ColorTurbine/ColorTurbine</PackageProjectUrl>
+    <PackageRequireLicenseAcceptance>false</PackageRequireLicenseAcceptance>
+    <Copyright>Copyright 2018 (c) George Hahn. All rights reserved.</Copyright>
+    <PackageTags>IoT, Wifi, RGB, LED, MQTT, information radiator</PackageTags>
+  </PropertyGroup>
+  <ItemGroup>
+    <PackageReference Include="HangFire.Core" Version="1.7.0-beta1" />
+    <PackageReference Include="Hangfire.MemoryStorage" Version="1.5.2" />
+    <PackageReference Include="InfluxData.Net" Version="8.0.1" />
+    <PackageReference Include="Q42.HueApi" Version="3.6.3" />
+    <PackageReference Include="Q42.HueApi.ColorConverters" Version="3.6.0" />
+    <PackageReference Include="SolarCalculator" Version="2.0.3" />
+    <PackageReference Include="WUnderground.Net" Version="2.0.7" />
+  </ItemGroup>
+</Project>

@@ -11,7 +11,7 @@
   </ItemGroup>
 
   <ItemGroup>
-    <ProjectReference Include="..\ColorTurbine\ColorTurbine.csproj" />
+    <ProjectReference Include="..\ColorTurbine.Framework\ColorTurbine.Framework.csproj" />
   </ItemGroup>
 
 </Project>
