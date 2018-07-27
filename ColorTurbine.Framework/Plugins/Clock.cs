@@ -57,7 +57,7 @@ namespace ColorTurbine
 
             for (int i = 0; i < strip.led_count; i++)
             {
-                strip[i] *= Services.Sun.CalculateSunPosition().brtscl;
+                strip[i] *= Services.Sun.Brightness;
             }
 
             strip[time.Second] = secondColor; // * (time.Millisecond / 1000.0);

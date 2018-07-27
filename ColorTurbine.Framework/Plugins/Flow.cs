@@ -2,6 +2,7 @@ using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
+using Hangfire;
 using static ColorTurbine.Strip;
 
 namespace ColorTurbine
@@ -72,14 +73,40 @@ namespace ColorTurbine
         public delegate void NewParticleEventHandler(object sender, Particle e);
         public event NewParticleEventHandler OnNewParticle;
 
+        private Palette palette;
+
         public Flow() : this(5)
         { }
 
-        public override void Initialize(IStrip s, PluginConfig config)
+        public async Task hourly()
+        {
+            palette = await Services.ColorMind.GetRandomPalette();
+
+            // HACK: 'graceful' fallback if colormind is down
+            if(palette == null)
+            {
+                Random r = new Random();
+                palette = new Palette();
+                palette.palette = new RGBColor[5];
+                for (int i = 0; i < palette.palette.Length; i++)
+                {
+                    byte[] buf = new byte[3];
+                    r.NextBytes(buf);
+                    palette.palette[i] = new RGBColor(buf[0], buf[1], buf[2]);
+                }
+            }
+        }
+        
+        public override async void Initialize(IStrip s, PluginConfig config)
         {
             base.Initialize(s, config);
 
-            // TODO: Configure
+            await hourly();
+            Services.Sun.OnSunrise += async (_) =>
+            {
+                await hourly();
+            };
+            RecurringJob.AddOrUpdate(() => hourly(), Cron.Hourly);
         }
 
         public Flow(int maxParticles)
@@ -107,17 +134,17 @@ namespace ColorTurbine
             for (int i = particles.Count; i < maxParticles; i++)
             {
                 var particle = new Particle(strip.led_count);
-                if(Services.Sun.NightMode)
+                if (Services.Sun.NightMode)
                 {
-                    particle.color = Services.Theme.GetRandomAccent();
+                    particle.color = randomPaletteColor();
                 }
                 else
                 {
-                    particle.color = Services.Theme.GetRandomAccent();
+                    particle.color = randomPaletteColor();
                     // var palette = await Services.ColorMind.GetSuggestedPalette(/* TODO OTHER PARTICLES - sorted? */ null);
                     // particle.color = palette.ElementAt(4);
                 }
-                
+
                 if (OnNewParticle != null)
                 {
                     OnNewParticle(this, particle);
@@ -126,6 +153,12 @@ namespace ColorTurbine
                 particles.Add(particle);
             }
             return;
+        }
+
+        Random r = new Random();
+        private RGBWColor randomPaletteColor()
+        {
+            return new RGBWColor(palette.palette[r.Next(palette.palette.Length)]);
         }
 
         public override void Paint()

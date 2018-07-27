@@ -1,11 +1,29 @@
-build_image:
+stages:
+  - build
+  - deploy
+
+build_release:
   image: docker:git
+  stage: build
   services:
-  - docker:dind
+    - docker:dind
+  script:
+    - docker build -t build-sdk .
+    - docker run --name built -t build-sdk dotnet test ColorTurbine.Tests/ColorTurbine.Tests.csproj
+    - docker cp built:/app app/
+  artifacts:
+    name: "${CI_COMMIT_REF_NAME}"
+    paths:
+      - app/
+
+deploy_image:
+  image: docker:git
+  stage: deploy
+  services:
+    - docker:dind
   script:
     - docker login -u gitlab-ci-token -p $CI_BUILD_TOKEN registry.gitlab.com
-    - docker build -t registry.gitlab.com/colorturbine/colorturbine .
-    - docker run registry.gitlab.com/colorturbine/colorturbine dotnet test /ColorTurbine.tests/ColorTurbine.tests.csproj
-    - docker push registry.gitlab.com/colorturbine/colorturbine:latest
+    - docker build -t registry.gitlab.com/ColorTurbine/ColorTurbine:latest -f deploy.Dockerfile .
+    - docker push registry.gitlab.com/ColorTurbine/ColorTurbine:latest
   only:
     - master

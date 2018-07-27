@@ -1,20 +1,15 @@
-FROM microsoft/dotnet:2.1-sdk
+FROM microsoft/dotnet:2.1-sdk AS build
+WORKDIR /build
 
 # Copy all source
 COPY . ./
 
-# Build app
-WORKDIR /ColorTurbine
+# Restore all packages
 RUN dotnet restore
-RUN dotnet publish -c Release -o out
 
-# Build tests
-WORKDIR /ColorTurbine.tests
-RUN dotnet restore
-RUN dotnet publish -c Release -o out
-
-# Return to release
-WORKDIR /ColorTurbine
+# Build all projects
+RUN dotnet publish ColorTurbine.Framework -c Release -o /app
+RUN dotnet publish ColorTurbine -c Release -o /app
 
 # Run
-CMD ["dotnet", "out/ColorTurbine.dll"]
+CMD ["dotnet", "/app/ColorTurbine.dll"]

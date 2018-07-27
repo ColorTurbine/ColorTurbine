@@ -11,6 +11,9 @@ public class InfluxDBService
     public InfluxDBService()
     {
         var config = Services.Configuration.GetServiceConfiguration("influxDB");
+        if(config == null)
+            return;
+
         string url = config["url"];
         string user = config["user"];
         string password = config["password"];

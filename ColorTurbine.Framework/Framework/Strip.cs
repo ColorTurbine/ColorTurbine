@@ -49,8 +49,12 @@ namespace ColorTurbine
 
             buffer = new byte[packet_len];
             buffer.Initialize();
-            rleBuf = new byte[packet_len * 2];
-            rleBuf.Initialize();
+
+            if (enable_rle)
+            {
+                rleBuf = new byte[(int)Math.Ceiling(packet_len * 1.3)]; // Approx worst case
+                rleBuf.Initialize();
+            }
 
             var header = new byte[] { 0, 0, 0, 0, 0, 0 };
             header.CopyTo(buffer, 0);

@@ -24,6 +24,7 @@ namespace ColorTurbine
             // TODO: Use magic to properly initialize 2d plugins
             var loc = config.location.Replace("(", "").Replace(")", "").Split(",").Select(x=>int.Parse(x.Trim()));
             this.location = new Point(loc.ElementAt(0), loc.ElementAt(1));
+            //this.Font = this.FontCollection.Install("fonts/ostrich-sans-regular.ttf").CreateFont(22);
         }
 
         public override bool NeedsRender()
