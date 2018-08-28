@@ -80,7 +80,7 @@ namespace ColorTurbine
     {
         public string assembly { get; set; }
 
-        public string binary { get; set; }
+        public string plugin { get; set; }
 
         public string name { get; set; }
 
@@ -158,7 +158,7 @@ namespace ColorTurbine
                 {
                     asy = System.Reflection.Assembly.LoadFrom(rp.assembly);
                 }
-                RuntimePlugin gin = (RuntimePlugin)asy.CreateInstance(rp.binary);
+                RuntimePlugin gin = (RuntimePlugin)asy.CreateInstance(rp.plugin);
                 gin.Initialize(m, rp);
 
                 return gin;
