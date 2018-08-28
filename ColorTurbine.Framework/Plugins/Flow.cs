@@ -80,6 +80,7 @@ namespace ColorTurbine
 
         public async Task hourly()
         {
+            Console.WriteLine("Requesting new palette");
             palette = await Services.ColorMind.GetRandomPalette();
 
             // HACK: 'graceful' fallback if colormind is down
