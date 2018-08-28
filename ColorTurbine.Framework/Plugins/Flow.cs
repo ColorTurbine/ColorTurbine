@@ -78,8 +78,15 @@ namespace ColorTurbine
         public Flow() : this(5)
         { }
 
+        private DateTime hourlyTimer = DateTime.MinValue;
         public async Task hourly()
         {
+            if(hourlyTimer > DateTime.UtcNow - TimeSpan.FromMinutes(5))
+            {
+                Console.WriteLine("Throttled: ignoring new palette request");
+                return;
+            }
+            hourlyTimer = DateTime.UtcNow;
             Console.WriteLine("Requesting new palette");
             palette = await Services.ColorMind.GetRandomPalette();
 
