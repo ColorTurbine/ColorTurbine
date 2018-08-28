@@ -16,7 +16,7 @@ ColorTurbine can be run directly in dotnet (`dotnet run`) or with docker.
 
 ## Docker
 
-Dockerfile:
+`docker-compose.yml`:
 ```
   colorturbine:
     image: registry.gitlab.com/colorturbine/colorturbine:latest

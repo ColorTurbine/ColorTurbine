@@ -101,12 +101,12 @@ namespace ColorTurbine
         {
             base.Initialize(s, config);
 
-            await hourly();
             Services.Sun.OnSunrise += async (_) =>
             {
                 await hourly();
             };
-            RecurringJob.AddOrUpdate(() => hourly(), Cron.Hourly);
+            RecurringJob.AddOrUpdate("hourly-flow-palette", () => hourly(), Cron.Hourly);
+            await hourly();
         }
 
         public Flow(int maxParticles)

@@ -119,9 +119,7 @@ namespace ColorTurbine
         {
             bool? config = pc.enabled;
 
-            // TODO: Support loading plugins from external assemblies
             // Voodoo: create plugin
-                // Voodoo: create plugin
             System.Reflection.Assembly asy;
             if (pc.assembly == null)
             {
