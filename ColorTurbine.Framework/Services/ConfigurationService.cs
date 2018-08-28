@@ -25,6 +25,7 @@ namespace ColorTurbine
         public string plugin { get; set; }
         public string name { get; set; }
         public string location { get; set; }
+        public string assembly { get; set; }
         public bool? enabled { get; set; }
         public IEnumerable<string> tags { get; set; }
 
@@ -118,9 +119,24 @@ namespace ColorTurbine
         {
             bool? config = pc.enabled;
 
+            // TODO: Support loading plugins from external assemblies
             // Voodoo: create plugin
-            var asy = System.Reflection.Assembly.GetExecutingAssembly();
+                // Voodoo: create plugin
+            System.Reflection.Assembly asy;
+            if (pc.assembly == null)
+            {
+                asy = System.Reflection.Assembly.GetExecutingAssembly();
+            }
+            else
+            {
+                asy = System.Reflection.Assembly.LoadFrom(pc.assembly);
+            }
             IPlugin gin = (IPlugin)asy.CreateInstance(pc.plugin);
+            if(gin == null)
+            {
+                // throw something worthwhile
+                throw new Exception($"Could not create plugin: {pc.plugin}");
+            }
 
             gin.Initialize(s, pc); // TODO Move this to constructor
             gin.enabled = config ?? true; // TODO: Plugin should handle this
