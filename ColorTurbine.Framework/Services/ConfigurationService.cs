@@ -166,6 +166,7 @@ namespace ColorTurbine
             catch (Exception e)
             {
                 Console.WriteLine("Crashed while creating RuntimePlugin");
+                Console.WriteLine(e.ToString());
                 return null;
             }
         }
