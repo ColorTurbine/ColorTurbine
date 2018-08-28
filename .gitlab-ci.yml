@@ -23,7 +23,7 @@ deploy_image:
     - docker:dind
   script:
     - docker login -u gitlab-ci-token -p $CI_BUILD_TOKEN registry.gitlab.com
-    - docker build -t registry.gitlab.com/ColorTurbine/ColorTurbine:latest -f deploy.Dockerfile .
-    - docker push registry.gitlab.com/ColorTurbine/ColorTurbine:latest
+    - docker build -t registry.gitlab.com/colorturbine/colorturbine:latest -f deploy.Dockerfile .
+    - docker push registry.gitlab.com/colorturbine/colorturbine:latest
   only:
     - master

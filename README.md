@@ -12,4 +12,42 @@ Copy `config.json.example` to `config.json` and customize it to fit your needs. 
 
 # Running
 
-ColorTurbine can be run directly in dotnet (`dotnet run`) or with docker. A public docker image is planned.
+ColorTurbine can be run directly in dotnet (`dotnet run`) or with docker.
+
+## Docker
+
+Dockerfile:
+```
+  colorturbine:
+    image: registry.gitlab.com/colorturbine/colorturbine:latest
+    links:
+      - mosquitto
+      - influxdb
+    volumes:
+      - colorturbine/config.json:/app/config.json
+      - colorturbine/plugins/:/plugins
+    restart: unless-stopped
+    
+  mosquitto:
+    image: eclipse-mosquitto
+    ports:
+      - 1883:1883
+      - 9001:9001
+    volumes:
+      - mosquitto/config:/mosquitto/config
+      - mosquitto/data:/mosquitto/data
+    restart: unless-stopped
+    
+  influxdb:
+    image: influxdb
+    ports:
+      - 8083:8083
+      - 8086:8086
+    volumes:
+      - influxdb:/var/lib/influxdb
+    environment:
+      - "INFLUXDB_HTTP_AUTH_ENABLED=false"
+      - "INFLUXDB_REPORTING_DISABLED=true"
+      - "INFLUXDB_MONITOR_STORE_INTERVAL=180s"
+    restart: unless-stopped
+```
