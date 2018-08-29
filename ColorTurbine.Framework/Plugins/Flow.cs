@@ -111,6 +111,7 @@ namespace ColorTurbine
 
             Services.Sun.OnSunrise += async (_) =>
             {
+                Console.WriteLine("Sunrise");
                 await hourly();
             };
             RecurringJob.AddOrUpdate("hourly-flow-palette", () => hourly(), Cron.Hourly);
