@@ -1,6 +1,8 @@
 stages:
   - build
   - deploy
+  - build_nuget
+  - deploy_nuget
 
 build_release:
   image: docker:git
@@ -25,5 +27,30 @@ deploy_image:
     - docker login -u gitlab-ci-token -p $CI_BUILD_TOKEN registry.gitlab.com
     - docker build -t registry.gitlab.com/colorturbine/colorturbine:latest -f deploy.Dockerfile .
     - docker push registry.gitlab.com/colorturbine/colorturbine:latest
+  only:
+    - master
+
+build:
+  image: microsoft/dotnet:2.1-sdk
+  stage: build_nuget
+  script:
+    - dotnet build ColorTurbine -c Release -o "${PWD}/artifacts/"
+    - dotnet build ColorTurbine.Framework  -c Release -o "${PWD}/artifacts/"
+    - dotnet build ColorTurbine.Tests -c Release -o "${PWD}/artifacts/"
+    - dotnet test ColorTurbine.Tests/ColorTurbine.Tests.csproj
+  artifacts:
+    expire_in: 31d
+    paths:
+      - artifacts/*
+
+deploy_master:
+  image: microsoft/dotnet:2.1-sdk
+  stage: deploy_nuget
+  script:
+    - dotnet pack ColorTurbine.Framework --version-suffix beta -c Release -o "${PWD}/artifacts/"
+    - dotnet nuget push --force-english-output -s https://api.nuget.org/v3/index.json -k "${nuget_api_key}" ./artifacts/*.nupkg
+  artifacts:
+    paths:
+      - artifacts/*
   only:
     - master
