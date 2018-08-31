@@ -1,12 +1,12 @@
 stages:
-  - build
-  - deploy
   - build_nuget
   - deploy_nuget
+  - build_docker
+  - deploy_docker
 
-build_release:
+build_image:
   image: docker:git
-  stage: build
+  stage: build_docker
   services:
     - docker:dind
   script:
@@ -20,7 +20,7 @@ build_release:
 
 deploy_image:
   image: docker:git
-  stage: deploy
+  stage: deploy_docker
   services:
     - docker:dind
   script:
@@ -35,7 +35,7 @@ build:
   stage: build_nuget
   script:
     - dotnet build ColorTurbine -c Release -o "${PWD}/artifacts/"
-    - dotnet build ColorTurbine.Framework  -c Release -o "${PWD}/artifacts/"
+    - dotnet build ColorTurbine.Framework -c Release -o "${PWD}/artifacts/"
     - dotnet build ColorTurbine.Tests -c Release -o "${PWD}/artifacts/"
     - dotnet test ColorTurbine.Tests/ColorTurbine.Tests.csproj
   artifacts:
