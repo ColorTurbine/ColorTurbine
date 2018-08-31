@@ -17,6 +17,8 @@ build_image:
     name: "${CI_COMMIT_REF_NAME}"
     paths:
       - app/
+  only:
+    - master
 
 deploy_image:
   image: docker:git
