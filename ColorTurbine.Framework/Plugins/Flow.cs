@@ -73,13 +73,13 @@ namespace ColorTurbine
         public delegate void NewParticleEventHandler(object sender, Particle e);
         public event NewParticleEventHandler OnNewParticle;
 
-        private Palette palette;
+        private static Palette palette;
 
         public Flow() : this(5)
         { }
 
-        private DateTime hourlyTimer = DateTime.MinValue;
-        public async Task hourly()
+        private static DateTime hourlyTimer = DateTime.MinValue;
+        public static async Task hourly()
         {
             if(hourlyTimer > DateTime.UtcNow - TimeSpan.FromMinutes(5))
             {
@@ -105,17 +105,24 @@ namespace ColorTurbine
             }
         }
         
+        private static bool flow_plugin_initialized = false;
+
         public override async void Initialize(IStrip s, PluginConfig config)
         {
             base.Initialize(s, config);
 
-            Services.Sun.OnSunrise += async (_) =>
+            if(!flow_plugin_initialized)
             {
-                Console.WriteLine("Sunrise");
+                flow_plugin_initialized = true;
+
+                Services.Sun.OnSunrise += async (_) =>
+                {
+                    Console.WriteLine("Sunrise");
+                    await hourly();
+                };
+                RecurringJob.AddOrUpdate("hourly-flow-palette", () => hourly(), Cron.Hourly);
                 await hourly();
-            };
-            RecurringJob.AddOrUpdate("hourly-flow-palette", () => hourly(), Cron.Hourly);
-            await hourly();
+            }
         }
 
         public Flow(int maxParticles)
