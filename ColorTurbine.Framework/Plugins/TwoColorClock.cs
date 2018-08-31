@@ -39,7 +39,10 @@ namespace ColorTurbine
 
             Services.Sun.OnSunEvent += (ev) =>
             {
-                _smudged = true;
+                if(enabled)
+                {
+                    _smudged = true;
+                }
             };
         }
 
