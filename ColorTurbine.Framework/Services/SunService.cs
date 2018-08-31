@@ -129,9 +129,12 @@ namespace ColorTurbine
             }
             set
             {
-                nightModeValue = value;
-                nightModeOverride = true;
-                set_sun(nightModeValue ? SunEvent.Sunset : SunEvent.Sunrise);
+                if(NightMode != value)
+                {
+                    nightModeValue = value;
+                    nightModeOverride = true;
+                    set_sun(nightModeValue ? SunEvent.Sunset : SunEvent.Sunrise);
+                }
             }
         }
 
