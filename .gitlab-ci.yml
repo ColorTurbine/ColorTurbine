@@ -48,7 +48,7 @@ deploy_master:
   stage: deploy_nuget
   script:
     - dotnet pack ColorTurbine.Framework --version-suffix beta -c Release -o "${PWD}/artifacts/"
-    - dotnet nuget push --force-english-output -s https://api.nuget.org/v3/index.json -k "${nuget_api_key}" ./artifacts/*.nupkg
+    - dotnet nuget push --force-english-output -s https://api.nuget.org/v3/index.json -k "${nuget_api_key}" "${PWD}/artifacts/*.nupkg"
   artifacts:
     paths:
       - artifacts/*
