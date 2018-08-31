@@ -41,6 +41,11 @@ namespace ColorTurbine
 
         [JsonExtensionData]
         private IDictionary<string, JToken> _additionalData = null;
+
+        public override string ToString()
+        {
+            return $"Plugin: {assembly},{plugin} {name} [{(enabled == true ? "E" : "D")}] {(_additionalData != null ? String.Join(", ", _additionalData) : "")}";
+        }
     }
 
     [DebuggerDisplay("{name} {type} {address}")]
@@ -58,6 +63,11 @@ namespace ColorTurbine
         public bool mirroredX { get; set; }
 
         public List<PluginConfig> plugins {get;set;}
+
+        public override string ToString()
+        {
+            return $"Strip: {name}@{address} [{type}] {(plugins != null ? String.Join(", ", plugins) : "")}";
+        }
     }
 
     public class ServiceConfig
@@ -74,6 +84,11 @@ namespace ColorTurbine
 
         [JsonExtensionData]
         private IDictionary<string, JToken> _additionalData = null;
+
+        public override string ToString()
+        {
+            return $"Service: {(_additionalData != null ? String.Join(", ", _additionalData) : "")}";
+        }
     }
 
     public class RuntimePluginConfig
@@ -96,6 +111,11 @@ namespace ColorTurbine
 
         [JsonExtensionData]
         private IDictionary<string, JToken> _additionalData = null;
+
+        public override string ToString()
+        {
+            return $"Runtime {assembly},{plugin} {name} {(_additionalData != null ? String.Join(", ", _additionalData) : "")}";
+        }
     }
 
     public class Configuration
@@ -167,6 +187,7 @@ namespace ColorTurbine
             {
                 Console.WriteLine("Crashed while creating RuntimePlugin");
                 Console.WriteLine(e.ToString());
+                Console.WriteLine(rp.ToString());
                 return null;
             }
         }
