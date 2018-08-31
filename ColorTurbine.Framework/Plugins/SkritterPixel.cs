@@ -22,6 +22,7 @@ namespace ColorTurbine
         string user_name;
         string user_password;
         bool enable_logging;
+        ServiceConfig influxConfig;
 
         public override void Initialize(IStrip s, PluginConfig config)
         {
@@ -31,7 +32,8 @@ namespace ColorTurbine
             oauth_client_secret = config["OAUTH_CLIENT_SECRET"];
             user_name = config["username"];
             user_password = config["password"];
-            enable_logging = config["logging"] ?? false;
+            influxConfig = Services.Configuration.GetServiceConfiguration("influxDB");
+            enable_logging = influxConfig != null;
         }
 
         private async Task<string> login()
